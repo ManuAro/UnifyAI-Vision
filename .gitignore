@@ -1,0 +1,31 @@
+# Archivos temporales de capturas
+screen.png
+screen_grid.png
+before_click_*.png
+after_click_*.png
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Variables de entorno (NUNCA subir API keys)
+.env
+.env.local
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
