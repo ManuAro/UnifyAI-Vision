@@ -3,6 +3,13 @@ screen.png
 screen_grid.png
 before_click_*.png
 after_click_*.png
+cursor_iter_*.png
+before_final_click.png
+after_final_click.png
+
+# Archivos de backup
+*_old.*
+*_backup.*
 
 # Archivos de Python
 __pycache__/

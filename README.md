@@ -1,222 +1,328 @@
-# 🤖 Agente Visual Autónomo - Multi-Step
+# 🤖 UnifyVision - Autonomous Visual Agent
 
-Un agente visual autónomo que entiende tareas en lenguaje natural, genera un plan de acción automáticamente y lo ejecuta paso a paso interactuando con tu pantalla.
+An autonomous visual agent that understands tasks in natural language, automatically generates an action plan, and executes it step by step by interacting with your screen.
 
-## Características
+## ✨ Features
 
-**Planificación Automática:**
-- GPT-4o-mini genera un plan de pasos completo a partir de tu instrucción
-- Entiende tareas complejas como "enviar un correo", "buscar en Google", etc.
-- No necesitas especificar cada paso, el agente lo deduce
+**Automatic Planning:**
+- GPT-4o-mini generates a complete step plan from your instruction
+- Understands complex tasks like "send an email", "search on Google", etc.
+- No need to specify each step, the agent deduces it
 
-**Ejecución Multi-Step:**
-- Captura de pantalla por cada acción de click
-- Análisis visual con GPT-4o-mini Vision API
-- Acciones soportadas: `click`, `type` (con soporte de loop), `press`, `wait`
-- Sistema de grilla para mayor precisión en la detección
-- Manejo de errores con continuación del flujo
+**Multi-Step Execution:**
+- Screen capture for each click action
+- Visual analysis with GPT-4o-mini Vision API
+- Supported actions: `click`, `type` (with loop support), `press`, `wait`
+- Grid system for higher precision in detection
+- Error handling with flow continuation
 
-**Interfaz:**
-- Logs con emojis para seguimiento visual del proceso
-- Resumen de ejecución al finalizar
-- Tecla ESC para cancelar en cualquier momento
-- Limpieza automática de archivos temporales
+**Professional Architecture:**
+- Modular design with separation of concerns
+- Robust error handling with custom exceptions
+- Professional logging system
+- Type hints throughout the codebase
+- Unit tests for core functionality
 
-## Requisitos
+## 📁 Project Structure
 
-### Paquetes Requeridos
-Los siguientes paquetes ya están instalados:
-- `openai`
-- `pyautogui`
-- `pillow`
-- `mss`
-- `pyperclip` (para escribir caracteres especiales)
+```
+UnifyVision/
+├── src/
+│   ├── __init__.py           # Package initialization
+│   ├── config.py             # Centralized configuration
+│   ├── exceptions.py         # Custom exceptions
+│   ├── logger.py             # Logging system
+│   ├── screen_capture.py     # Screen capture functionality
+│   ├── grid_system.py        # Grid overlay system
+│   ├── openai_client.py      # OpenAI API client
+│   ├── planner.py            # Plan generation
+│   ├── actions.py            # Action execution (click, type, etc.)
+│   └── executor.py           # Plan executor
+├── tests/
+│   ├── __init__.py
+│   ├── test_config.py        # Configuration tests
+│   └── test_planner.py       # Planning tests
+├── main.py                   # Application entry point
+├── requirements.txt          # Python dependencies
+└── README.md                 # This file
+```
 
-### Paquetes Opcionales
-- `keyboard` - Permite cancelar con ESC durante la ejecución
+## 🚀 Requirements
+
+### Required Packages
+The following packages are already in `requirements.txt`:
+- `openai>=1.0.0`
+- `pyautogui>=0.9.54`
+- `pillow>=10.0.0`
+- `mss>=9.0.0`
+- `pyperclip>=1.8.2`
+
+### Optional Packages
+- `keyboard>=0.13.5` - Allows canceling with ESC during execution
   ```bash
   pip3 install keyboard
   ```
-  **Nota**: Si no está instalado, el agente funcionará igualmente, pero solo podrás cancelar con Ctrl+C o el failsafe de PyAutoGUI
+  **Note**: If not installed, the agent will work but you can only cancel with Ctrl+C or PyAutoGUI's failsafe
 
-## Configuración
+## ⚙️ Configuration
 
-1. **⚠️ IMPORTANTE**: Configurar la API key de OpenAI como variable de entorno:
+1. **⚠️ IMPORTANT**: Set the OpenAI API key as an environment variable:
 
 ```bash
-export OPENAI_API_KEY='tu-api-key-aqui'
+export OPENAI_API_KEY='your-api-key-here'
 ```
 
-**Nunca hardcodees tu API key en el código**. El código ahora solo acepta la API key desde variables de entorno por seguridad.
+**Never hardcode your API key in the code**. The code only accepts the API key from environment variables for security.
 
-2. En macOS, otorgar permisos de accesibilidad:
-   - Ir a **Preferencias del Sistema** → **Seguridad y Privacidad** → **Privacidad**
-   - Seleccionar **Accesibilidad** en la lista izquierda
-   - Agregar Terminal (o tu aplicación de terminal) a la lista de aplicaciones permitidas
+2. On macOS, grant accessibility permissions:
+   - Go to **System Preferences** → **Security & Privacy** → **Privacy**
+   - Select **Accessibility** in the left list
+   - Add Terminal (or your terminal app) to the list of allowed applications
 
-## Uso
+## 📖 Usage
 
 ```bash
 python main.py
 ```
 
-El programa te pedirá que describas la tarea completa que quieres realizar:
+The program will ask you to describe the complete task you want to perform:
 
 ```
-🎯 ¿Qué tarea querés que ejecute?: Enviá un correo a juan@test.com con asunto "Reunión" y mensaje "Nos vemos mañana"
+🎯 What task do you want to execute?: Send an email to john@test.com with subject "Meeting" and message "See you tomorrow"
 ```
 
-## Flujo del Programa
+## 🔄 Program Flow
 
-1. **🧠 Planificación** - GPT-4o-mini genera un plan de pasos en JSON
-2. **📋 Revisión** - Muestra el plan generado para tu revisión
-3. **🚀 Ejecución** - Ejecuta cada paso del plan:
-   - Para `click`: Captura pantalla → Vision API → Click
-   - Para `type`: Escribe el texto
-   - Para `press`: Presiona la tecla
-   - Para `wait`: Espera N segundos
-4. **📊 Resumen** - Muestra estadísticas de ejecución
-5. **🗑️ Limpieza** - Elimina archivos temporales
+1. **🧠 Planning** - GPT-4o-mini generates a step plan in JSON
+2. **📋 Review** - Shows the generated plan for your review
+3. **🚀 Execution** - Executes each step of the plan:
+   - For `click`: Capture screen → Vision API → Click
+   - For `type`: Write the text
+   - For `press`: Press the key
+   - For `wait`: Wait N seconds
+4. **📊 Summary** - Shows execution statistics
+5. **🗑️ Cleanup** - Removes temporary files
 
-## Ejemplos de Tareas
+## 💡 Task Examples
 
-**Correos:**
-- `Enviá un correo a juan@test.com con asunto "Hola"`
-- `Redactá un correo nuevo para maria@empresa.com`
+**Emails:**
+- `Send an email to john@test.com with subject "Hello"`
+- `Draft a new email for maria@company.com`
 
-**Navegación:**
-- `Abrí una nueva pestaña y buscá Python en Google`
-- `Clickeá en el botón de configuración`
+**Navigation:**
+- `Open a new tab and search Python on Google`
+- `Click the settings button`
 
-**Tareas Simples:**
-- `Hacé click en el botón Play`
-- `Escribí "Hola mundo" en el campo de búsqueda`
+**Simple Tasks:**
+- `Click the Play button`
+- `Write "Hello world" in the search field`
 
-**Tareas Complejas:**
-El agente entiende secuencias completas y genera los pasos automáticamente. Por ejemplo, para "enviar un correo" entiende que debe:
-1. Click en botón Redactar
-2. Click en campo destinatario
-3. Escribir email
-4. Navegar al asunto
-5. Escribir asunto
+**Complex Tasks:**
+The agent understands complete sequences and generates steps automatically. For example, for "send an email" it understands that it should:
+1. Click Compose button
+2. Click recipient field
+3. Write email
+4. Navigate to subject
+5. Write subject
 6. Etc.
 
-## Controles
+## 🎮 Controls
 
-- **ESC**: Cancela la ejecución del plan en cualquier momento (requiere paquete `keyboard` instalado)
-- **Ctrl+C**: Interrumpe el programa completamente
-- **Mouse a esquina superior izquierda**: Failsafe de PyAutoGUI (cancela inmediatamente)
+- **ESC**: Cancels plan execution at any time (requires `keyboard` package installed)
+- **Ctrl+C**: Interrupts the program completely
+- **Mouse to top-left corner**: PyAutoGUI failsafe (cancels immediately)
 
-## Arquitectura
+## 🏗️ Architecture
 
-### Planificación (Planning Agent)
-GPT-4o-mini recibe tu instrucción y genera un plan estructurado usando **patrones de flujo comunes**.
+### Module Overview
 
-El agente conoce los flujos típicos de:
-- **Enviar email**: Redactar → Destinatario → Asunto → Cuerpo → Enviar
-- **Búsqueda web**: Click en barra → Escribir → Enter/Buscar
-- **Formularios**: Rellenar campos → Submit
+**Config** (`src/config.py`)
+- Centralized configuration management
+- Environment variable handling
+- Validation of required settings
 
-**Input:** "Enviá un correo a juan@test.com con asunto Hola"
+**Exceptions** (`src/exceptions.py`)
+- Custom exception hierarchy
+- Specific error types for different failure modes
 
-**Output (JSON generado):**
+**Logger** (`src/logger.py`)
+- Professional logging with emoji support
+- Configurable log levels
+- Optional file logging
+
+**Screen Capture** (`src/screen_capture.py`)
+- Screenshot functionality
+- Display scaling detection (Retina support)
+- Image encoding for API calls
+- Screen change detection
+
+**Grid System** (`src/grid_system.py`)
+- Grid overlay generation
+- Element location using grid cells
+- Coordinate calculation from cell data
+- Caching for performance
+
+**OpenAI Client** (`src/openai_client.py`)
+- Responses API integration
+- Chat Completions for planning
+- Automatic retry logic
+
+**Planner** (`src/planner.py`)
+- Plan generation from user instructions
+- Plan validation
+- JSON extraction from responses
+
+**Actions** (`src/actions.py`)
+- Individual action execution
+- Multi-click pattern for reliability
+- Clipboard-based typing
+- Screen change verification
+
+**Executor** (`src/executor.py`)
+- Complete plan execution
+- Error handling and recovery
+- Execution statistics
+- Temporary file cleanup
+
+### Planning Agent
+
+GPT-4o-mini receives your instruction and generates a structured plan using **common flow patterns**.
+
+The agent knows the typical flows of:
+- **Send email**: Compose → Recipient → Subject → Body → Send
+- **Web search**: Click on bar → Write → Enter/Search
+- **Forms**: Fill fields → Submit
+
+**Input:** "Send an email to john@test.com with subject Hello"
+
+**Output (Generated JSON):**
 ```json
 [
-  {"action": "click", "target": "botón para redactar email"},
+  {"action": "click", "target": "button to compose email"},
   {"action": "wait", "seconds": 1},
-  {"action": "click", "target": "campo de texto para destinatario"},
-  {"action": "type", "text": "juan@test.com"},
+  {"action": "click", "target": "text field for recipient"},
+  {"action": "type", "text": "john@test.com"},
   {"action": "press", "key": "tab"},
-  {"action": "type", "text": "Hola"},
-  {"action": "click", "target": "área de cuerpo del mensaje"},
-  {"action": "type", "text": "Contenido ", "loop": true, "loop_duration": 3},
-  {"action": "click", "target": "botón de envío"}
+  {"action": "type", "text": "Hello"},
+  {"action": "click", "target": "message body area"},
+  {"action": "type", "text": "Content ", "loop": true, "loop_duration": 3},
+  {"action": "click", "target": "send button"}
 ]
 ```
 
-**Nota**: El modelo NO usa nombres exactos de botones (evita hardcodear "Redactar", "Compose", etc.), sino descripciones visuales genéricas que funcionan en múltiples interfaces.
+**Note**: The model does NOT use exact button names (avoids hardcoding "Compose", "New", etc.), but generic visual descriptions that work across multiple interfaces.
 
-### Acción Type con Loop
+### Type Action with Loop
 
-La acción `type` ahora soporta escribir repetidamente:
+The `type` action now supports writing repeatedly:
 
 ```json
 {
   "action": "type",
-  "text": "Texto a repetir ",
+  "text": "Text to repeat ",
   "loop": true,
   "loop_duration": 5,
   "delay_between": 0.3
 }
 ```
 
-**Parámetros:**
-- `text`: Texto a escribir
-- `loop`: `true` para activar modo repetición (opcional, default: `false`)
-- `loop_duration`: Duración en segundos (opcional, default: 5)
-- `delay_between`: Delay entre repeticiones en segundos (opcional, default: 0.3)
+**Parameters:**
+- `text`: Text to write
+- `loop`: `true` to activate repeat mode (optional, default: `false`)
+- `loop_duration`: Duration in seconds (optional, default: 5)
+- `delay_between`: Delay between repetitions in seconds (optional, default: 0.3)
 
-**Ejemplo de uso**: Llenar un campo de texto con mucho contenido repetidamente.
+### Execution Loop
 
-### Ejecución (Execution Loop)
-Cada paso del plan se ejecuta secuencialmente:
-- **Click**: Screenshot → GPT-4o-mini Vision → Coordenadas → PyAutoGUI click
-- **Type**: PyAutoGUI escribe el texto caracter por caracter
-- **Press**: PyAutoGUI presiona la tecla especificada
-- **Wait**: Sleep por N segundos
+Each plan step is executed sequentially:
+- **Click**: Screenshot → GPT-4o-mini Vision → Coordinates → PyAutoGUI click
+- **Type**: PyAutoGUI writes the text character by character
+- **Press**: PyAutoGUI presses the specified key
+- **Wait**: Sleep for N seconds
 
-## Ventajas de Este Enfoque
+## 🧪 Testing
 
-- **Sin Fine-Tuning**: Todo funciona con prompting inteligente
-- **Contexto Nativo**: GPT-4o ya sabe cómo funcionan apps comunes
-- **Flexible**: Funciona con cualquier aplicación (Gmail, Slack, navegadores, etc.)
-- **Auto-Correctivo**: Continúa ejecutando aunque falle un paso
-- **Transparente**: Ves el plan antes de que se ejecute
+Run the test suite:
 
-## Notas Técnicas
+```bash
+python -m unittest discover tests
+```
 
-- El archivo `screen.png` se crea/elimina por cada acción de click
-- `pyautogui.FAILSAFE = True`: Mover mouse a esquina cancela
-- `pyautogui.PAUSE = 0.5s`: Pausa de seguridad entre acciones
-- Hay pausa de 0.5s entre cada paso del plan
-- El agente continúa ejecutando aunque falle algún paso
+Run specific test file:
 
-## Solución de Problemas
+```bash
+python -m unittest tests.test_config
+python -m unittest tests.test_planner
+```
 
-### "No se encontró OPENAI_API_KEY"
+## ⚡ Advantages of This Approach
+
+- **No Fine-Tuning**: Everything works with intelligent prompting
+- **Native Context**: GPT-4o already knows how common apps work
+- **Flexible**: Works with any application (Gmail, Slack, browsers, etc.)
+- **Self-Correcting**: Continues executing even if a step fails
+- **Transparent**: You see the plan before it executes
+- **Maintainable**: Clean modular architecture
+- **Robust**: Professional error handling and logging
+
+## 📝 Technical Notes
+
+- The `screen.png` file is created/deleted for each click action
+- `pyautogui.FAILSAFE = True`: Move mouse to corner cancels
+- `pyautogui.PAUSE = 0.5s`: Safety pause between actions
+- There's a 0.5s pause between each plan step
+- The agent continues executing even if a step fails
+- All configuration is centralized in `src/config.py`
+- Custom exceptions provide clear error messages
+
+## 🐛 Troubleshooting
+
+### "OPENAI_API_KEY not found"
 ```bash
 export OPENAI_API_KEY='sk-...'
 ```
 
-### "Permission denied" en macOS
-Otorgar permisos de accesibilidad a Terminal en Preferencias del Sistema.
+### "Permission denied" on macOS
+Grant accessibility permissions to Terminal in System Preferences.
 
-### El plan se genera mal
-- **Problema**: El modelo hardcodea nombres exactos ("botón Redactar") que no existen
-  - **Solución**: El nuevo sistema usa patrones de flujo. Si sigue pasando, revisá PROMPT_ENGINEERING.md
-- **Problema**: Pasos fuera de orden o faltan pasos
-  - **Solución**: Sé más explícito en tu instrucción. En vez de "enviá un email", decí "redactá y enviá un email a X con asunto Y"
-- **Problema**: El modelo genera JSON inválido
-  - **Solución**: Esto es raro con el prompt actual. Revisá los logs y reportá el caso
+### Plan is generated incorrectly
+- **Problem**: Model hardcodes exact names ("Compose button") that don't exist
+  - **Solution**: The new system uses flow patterns. If it still happens, check the prompt in `src/openai_client.py`
+- **Problem**: Steps out of order or missing steps
+  - **Solution**: Be more explicit in your instruction. Instead of "send an email", say "draft and send an email to X with subject Y"
+- **Problem**: Model generates invalid JSON
+  - **Solution**: This is rare with the current prompt. Check logs and report the case
 
-### Pasos fallan
-- Asegurate de que la app esté visible en pantalla
-- Algunos elementos tardan en cargar, agregá `wait` en tu instrucción
-- Revisa los logs para ver qué coordenadas detectó
+### Steps fail
+- Make sure the app is visible on screen
+- Some elements take time to load, add `wait` in your instruction
+- Check the logs to see what coordinates were detected
+- Review the grid overlay in temporary files if available
 
-## Limitaciones Actuales
+## 📈 Improvements Implemented
 
-- Solo funciona con elementos visibles en pantalla
-- No maneja múltiples monitores (usa el principal)
-- El planning depende de la calidad del prompt de GPT-4o-mini
+✅ **Removed numpy** - No longer necessary, reducing dependencies
+✅ **API key security** - Only accepts keys from environment variables
+✅ **Type with loop** - Ability to write repeatedly with duration control
+✅ **Clean code** - Refactored search functions, eliminating duplication
+✅ **Better cleanup** - All temporary files are removed correctly
+✅ **No numpy in verification** - Uses only PIL to compare captures
+✅ **ESC cancellation** - Option to cancel execution by pressing ESC (optional, requires `keyboard`)
+✅ **Input always required** - User must always specify the task to execute
+✅ **Modular architecture** - Clean separation of concerns
+✅ **Professional logging** - Structured logging with levels
+✅ **Custom exceptions** - Specific error types for better handling
+✅ **Type hints** - Full type annotations
+✅ **Unit tests** - Basic test coverage
 
-## Mejoras Implementadas
+## 📄 License
 
-✅ **Eliminado numpy** - Ya no es necesario, reduciendo dependencias
-✅ **Seguridad de API key** - Solo acepta keys desde variables de entorno
-✅ **Type con loop** - Capacidad de escribir repetidamente con control de duración
-✅ **Código limpio** - Funciones de búsqueda refactorizadas, eliminando duplicación
-✅ **Mejor limpieza** - Todos los archivos temporales se eliminan correctamente
-✅ **Sin numpy en verificación** - Usa solo PIL para comparar capturas
-✅ **Cancelación con ESC** - Opción de cancelar la ejecución presionando ESC (opcional, requiere `keyboard`)
-✅ **Input siempre requerido** - El usuario siempre debe especificar la tarea a ejecutar
+This project is provided as-is for educational and automation purposes.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please ensure:
+- Code follows the existing architecture
+- New features include tests
+- Documentation is updated
+- Type hints are included
